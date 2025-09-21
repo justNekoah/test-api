@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1>测试创建 Issue (POST 请求)</h1>
-    <p>结果：<span id="result">正在发送...</span></p>
+    <h1>测试读取私有仓库信息</h1>
+    <p>结果：<span id="result">正在加载...</span></p>
 
     <script>
-        // 尝试在你的一个仓库里创建一个新的 Issue
-        // 将 `YOUR_USERNAME` 和 `YOUR_REPO` 替换成你的真实信息
-        fetch('https://api.github.com/repos/justNekoah/test-api/issues', {
-            method: 'POST',
+        // 尝试列出一个用户的所有仓库（包括私有仓库）
+        // 这个请求需要授权，但我们不提供 token
+        fetch('https://api.github.com/user/repos?visibility=private', {
             headers: {
-                'Content-Type': 'application/json',
-                // 注意：这里我们故意不提供 Authorization token
-            },
-            body: JSON.stringify({
-                title: 'Test Issue from GitHub Pages',
-                body: 'This is a test issue created from a webpage.'
-            })
+                // 注意：这里没有 Authorization 头
+            }
         })
         .then(response => {
             document.getElementById('result').textContent = '状态码: ' + response.status;
             return response.json();
         })
         .then(data => {
-            console.log(data);
             if (data.message) {
                 document.getElementById('result').textContent += ' | 错误: ' + data.message;
+            } else {
+                document.getElementById('result').textContent += ' | 仓库数: ' + data.length;
             }
         })
         .catch(error => {
