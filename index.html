@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>API 测试页面</h1>
+    <p>GitHub 用户名是：<span id="username">正在加载...</span></p>
+
+    <script>
+        fetch('https://api.github.com/users/justNekoah')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('username').textContent = data.login;
+            })
+            .catch(error => {
+                document.getElementById('username').textContent = '获取失败: ' + error;
+            });
+    </script>
+</body>
+</html>
