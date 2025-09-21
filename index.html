@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h1>API 测试页面</h1>
-    <p>GitHub 用户名是：<span id="username">正在加载...</span></p>
+    <h1>测试创建 Issue (POST 请求)</h1>
+    <p>结果：<span id="result">正在发送...</span></p>
 
     <script>
-        fetch('https://api.github.com/users/justNekoah')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('username').textContent = data.login;
+        // 尝试在你的一个仓库里创建一个新的 Issue
+        // 将 `YOUR_USERNAME` 和 `YOUR_REPO` 替换成你的真实信息
+        fetch('https://api.github.com/repos/justNekoah/test-api/issues', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 注意：这里我们故意不提供 Authorization token
+            },
+            body: JSON.stringify({
+                title: 'Test Issue from GitHub Pages',
+                body: 'This is a test issue created from a webpage.'
             })
-            .catch(error => {
-                document.getElementById('username').textContent = '获取失败: ' + error;
-            });
+        })
+        .then(response => {
+            document.getElementById('result').textContent = '状态码: ' + response.status;
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if (data.message) {
+                document.getElementById('result').textContent += ' | 错误: ' + data.message;
+            }
+        })
+        .catch(error => {
+            document.getElementById('result').textContent = '请求失败: ' + error;
+        });
     </script>
 </body>
 </html>
